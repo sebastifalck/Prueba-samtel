@@ -2,7 +2,6 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: dotnet
-  namespace: kubernetes
 spec:
   replicas: 1
   selector:
@@ -13,14 +12,21 @@ spec:
       labels:
         app: dotnet
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: agentpool
+                    operator: In
+                    values:
+                      - agentpool
       containers:
-        - name: dotnet
+        - env:
           image: sebastifalck/dotnet:58
-          env:
+          name: dotnet
+          ports:
           - containerPort: 80
-    selector:
-      matchLabels:
-        app: dotnet
 ---
 apiVersion: v1
 kind: Service
