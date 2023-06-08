@@ -17,8 +17,6 @@ spec:
         - name: dotnet
           image: sebastifalck/dotnet:58
           env:
-          - name: ASPNETCORE_URLS
-            value: http://*:80
           - containerPort: 80
     selector:
       matchLabels:
@@ -28,9 +26,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: dotnet
+  namespace: kubernetes
 spec:
-  type: Cluster IP
   ports:
-  - port: 80
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
   selector:
     app: dotnet
