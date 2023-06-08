@@ -1,0 +1,52 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: angular
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: angular
+  template:
+    metadata:
+      labels:
+        app: angular
+    spec:
+      containers:
+        - name: angular
+          image: sebastifalck/falckregistry:38
+          ports:
+          - containerPort: 4200
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: angular
+  namespace: kubernetes
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: myserviceb.foo.org
+      http:
+        paths:
+          - pathType: ImplementationSpecific
+            backend:
+              service:
+                name: angular
+                port:
+                  number: 4200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular
+  namespace: kubernetes
+spec:
+  ports:
+    - protocol: TCP
+      port: 4200
+      targetPort: 4200
+  selector:
+    app: angular
+  type: ClusterIP
