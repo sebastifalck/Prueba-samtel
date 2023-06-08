@@ -23,7 +23,7 @@ stages:
         Dockerfile: '**/Dockerfile'
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '$(Pipeline.Workspace)/s/environment'
+        targetPath: '$(Pipeline.Workspace)/s/aspnet-mssql/environment'
         artifact: 'environment'
         publishLocation: 'pipeline'
 
