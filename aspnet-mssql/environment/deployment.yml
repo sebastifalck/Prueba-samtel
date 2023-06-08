@@ -28,10 +28,28 @@ spec:
           ports:
           - containerPort: 80
 ---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dotnet
+  namespace: kubernetes
+spec:
+  rules:
+  - host: myservicea.foo.org
+    http:
+      paths:
+      - path: /dotnet(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: dotnet-sevice
+            port:
+              number: 80
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: dotnet
+  name: dotnet-sevice
   namespace: kubernetes
 spec:
   ports:
